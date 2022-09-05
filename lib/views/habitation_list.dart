@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:locations/models/habitation.dart';
+import 'package:locations/views/share/habitation_features_widget.dart';
 import 'package:locations/views/share/habitation_option.dart';
 
 import '../services/habitation_service.dart';
+import 'habitation_details.dart';
 
 class HabitationList extends StatelessWidget {
   final HabitationService service = HabitationService();
@@ -34,21 +36,30 @@ class HabitationList extends StatelessWidget {
   _buildRow(Habitation habitation, BuildContext context) {
     return Container(
       margin: EdgeInsets.all(4.0),
-      child: Column(
-        children: [
-          Container(
-            height: 150,
-            width: MediaQuery.of(context).size.width,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Image.asset(
-                'assets/images/locations/${habitation.image}',
-                fit: BoxFit.fitWidth,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HabitationDetails(habitation)),
+          );
+        },
+        child: Column(
+          children: [
+            Container(
+              height: 150,
+              width: MediaQuery.of(context).size.width,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Image.asset(
+                  'assets/images/locations/${habitation.image}',
+                  fit: BoxFit.fitWidth,
+                ),
               ),
             ),
-          ),
-          _buildDetails(habitation),
-        ],
+            _buildDetails(habitation),
+          ],
+        ),
       ),
     );
   }
@@ -81,13 +92,7 @@ class HabitationList extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              HabitationOption(Icons.bed, "${habitation.chambres} chambres"),
-              HabitationOption(Icons.fit_screen, "${habitation.superficie} m²"),
-            ],
-          )
+          HabitationFeaturesWidget(habitation),
         ],
       ),
     );

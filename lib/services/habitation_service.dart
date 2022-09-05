@@ -1,23 +1,19 @@
 import 'dart:core';
 
+import 'package:locations/models/habitations_data.dart';
+
 import '../models/habitation.dart';
 import '../models/typehabitat.dart';
+import '../models/typehabitat_data.dart';
 
 class HabitationService {
-  /* version "brute" */
-  final _typehabitats = [TypeHabitat(1, "Maison"), TypeHabitat(2, "Appartement")];
-  final _habitations = List.generate(30, (index) {
-      bool maison = index%3==0;
-      return Habitation(
-          index,
-          maison ? TypeHabitat(1, "Maison") : TypeHabitat(2, "Appartement"),
-          maison ? "maison.png" : "appartement.png" ,
-          "${maison ? 'Maison' : 'Appartement'} ${index}",
-          "Rue  ${index}",
-          (2 + index%3).toInt(),
-          ((maison ? 100 : 50) + index).toInt(),
-          ((maison ? 600 : 400) + index).toDouble());
-    });
+  var _typehabitats;
+  var _habitations;
+
+  HabitationService() {
+    _typehabitats = TypehabitatData.buildList();
+    _habitations = HabitationsData.buildList();
+  }
 
   List<TypeHabitat> getTypeHabitats() {
     return _typehabitats;
