@@ -2,18 +2,18 @@ import 'package:locations/models/location.dart';
 import 'package:collection/collection.dart';
 
 import '../models/habitation.dart';
-import '../models/locations_data.dart';
+import '../repositories/location_api_client.dart';
+import '../repositories/location_api_client_impl.dart';
 import 'habitation_service.dart';
 
 class LocationService {
-  late List<Location> _locations;
+  final LocationApiClient locationApiClient;
 
-  LocationService() {
-    _locations = LocationsData.buildList();
-  }
+  LocationService() :
+        locationApiClient = LocationApiClientImpl(); // LocationApiData()
 
-  List<Location> getLocations() {
-    List<Location> list = _locations;
+  Future<List<Location>> getLocations() async {
+    List<Location> list = await locationApiClient.getLocations();
 
     // Obtention des habitations
     List<int> habitationsIds = [];
@@ -24,7 +24,7 @@ class LocationService {
 
     // Obtention des habitations
     HabitationService service = HabitationService();
-    List<Habitation> habitations = service.getHabitations(habitationsIds);
+    List<Habitation> habitations = await service.getHabitations(habitationsIds);
     for (Location location in list) {
       // Recherche des habitations
       Habitation? habitation = habitations.firstWhereOrNull(
@@ -35,7 +35,7 @@ class LocationService {
     return list;
   }
 
-  Location getLocation(int id) {
-    return _locations.where((element) => element.id == id).first;
+  Future<Location> getLocation(int id) {
+    return locationApiClient.getLocation(id);
   }
 }

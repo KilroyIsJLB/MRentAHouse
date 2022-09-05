@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_file.dart';
 import 'package:intl/intl.dart';
 import 'package:locations/share/location_text_style.dart';
 import 'package:locations/views/share/bottom_navigation_bar_widget.dart';
@@ -18,7 +17,7 @@ class LocationList extends StatefulWidget {
 
 class _LocationListState extends State<LocationList> {
   final LocationService service = LocationService();
-  late List<Location> _locations;
+  late Future<List<Location>> _locations;
 
   @override
   void initState() {
@@ -33,7 +32,23 @@ class _LocationListState extends State<LocationList> {
         title: const Text('Mes locations'),
       ),
       body: Center(
-        child: _buildListView(context, _locations)
+        child: FutureBuilder<List<Location>>(
+          future: _locations,
+          initialData: const [],
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return _buildListView(context, snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Center(
+                  child: Text(
+                    'Impossible de récupérer les données : ${snapshot.error}',
+                    style: LocationTextStyle.errorTextStyle,
+                  ));
+            }
+            // By default, show a loading spinner.
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
       bottomNavigationBar: const BottomNavigationBarWidget(2),
     );
@@ -133,7 +148,7 @@ class _LocationListState extends State<LocationList> {
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: location.facture == null ?
-        Text('Aucune facture') :
+        const Text('Aucune facture') :
         Text('Facture délivrée le ${DateFormat('d MMM y').format(location.facture!.date)}'),
     );
   }

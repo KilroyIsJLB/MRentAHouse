@@ -61,8 +61,8 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   final HabitationService service = HabitationService();
   final String title;
-  late List<TypeHabitat> _typehabitats;
-  late List<Habitation> _habitations;
+  late Future<List<TypeHabitat>> _typehabitats;
+  late Future<List<Habitation>> _habitations;
 
   MyHomePage({required this.title, Key? key})
       : super(key: key) {
@@ -91,14 +91,34 @@ class MyHomePage extends StatelessWidget {
 
   _buildTypeHabitat(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(6.0),
+      padding: const EdgeInsets.all(6.0),
       height: 100,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: List.generate(
-          _typehabitats.length,
-          (index) => _buildHabitat(context, _typehabitats[index]),
-        ),
+      child: FutureBuilder<List<TypeHabitat>>(
+        future: _typehabitats,
+        initialData: const [],
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _buildRowTypeHabitat(context, snapshot.data!);
+          } else if (snapshot.hasError) {
+            return Center(
+                child: Text(
+                  'Impossible de récupérer les données : ${snapshot.error}',
+                  style: LocationTextStyle.errorTextStyle,
+                ));
+          }
+          // By default, show a loading spinner.
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+
+  _buildRowTypeHabitat(BuildContext context, List<TypeHabitat> typehabitats) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(
+        typehabitats.length,
+            (index) => _buildHabitat(context, typehabitats[index]),
       ),
     );
   }
@@ -151,13 +171,28 @@ class MyHomePage extends StatelessWidget {
   _buildDerniereLocation(BuildContext context) {
     return SizedBox(
       height: 240,
-      child: ListView.builder(
-        itemCount: _habitations.length,
-        itemExtent: 220,
-        itemBuilder: (context, index) =>
-            _buildRow(_habitations[index], context),
-        scrollDirection: Axis.horizontal,
-      ),
+      child: FutureBuilder<List<Habitation>>(
+          future: _habitations,
+          initialData: const [],
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemExtent: 220,
+                itemBuilder: (context, index) =>
+                    _buildRow(snapshot.data![index], context),
+                scrollDirection: Axis.horizontal,
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                  child: Text(
+                    'Impossible de récupérer les données : ${snapshot.error}',
+                    style: LocationTextStyle.errorTextStyle,
+                  ));
+            }
+            // By default, show a loading spinner.
+            return const Center(child: CircularProgressIndicator());
+          }),
     );
   }
 
