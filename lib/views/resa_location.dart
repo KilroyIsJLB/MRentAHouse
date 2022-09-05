@@ -5,6 +5,7 @@ import 'package:locations/models/habitation.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
 import 'package:locations/views/share/total_widget.dart';
+import 'package:locations/views/validation_location.dart';
 
 class OptionPayanteCheck extends OptionPayante {
   bool checked;
@@ -46,10 +47,10 @@ class _ResaLocationState extends State<ResaLocation> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Réservation'),
+        title: const Text('Réservation'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         children: [
           _buildResume(),
           _buildDates(),
@@ -82,7 +83,7 @@ class _ResaLocationState extends State<ResaLocation> {
 
   _buildResume() {
     return ListTile(
-      leading: Icon(Icons.house),
+      leading: const Icon(Icons.house),
       title: Text(widget._habitation.libelle),
       subtitle: Text(widget._habitation.adresse),
     );
@@ -111,9 +112,9 @@ class _ResaLocationState extends State<ResaLocation> {
               ],
             ),
           ),
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: LocationStyle.backgroundColorDarkBlue,
-            child: const Icon(Icons.arrow_forward),
+            child: Icon(Icons.arrow_forward),
           ),
           GestureDetector(
             onTap: () {
@@ -214,17 +215,17 @@ class _ResaLocationState extends State<ResaLocation> {
         color: LocationStyle.backgroundColorDarkBlue,
         borderRadius: BorderRadius.circular(8.0),
       ),
-      margin: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(LocationStyle.backgroundColorDarkBlue)
         ),
         onPressed: () {
           print('_buildRentButton pressed');
-          /*Navigator.push(
+          Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const LoginPage()));*/
+                  builder: (context) => const ValidationLocation()));
         },
         child: Text('Louer', style: LocationTextStyle.priceWhiteTextStyle,),
       ),

@@ -39,4 +39,8 @@ class HabitationService {
         .where((element) => element.typeHabitat.id == (isHouse ? 1 : 2))
         .toList();
   }
+
+  List<Habitation> getHabitations(List<int> habitationsIds) {
+    return _habitations.takeWhile((value) => habitationsIds.contains(value.id)).toList();
+  }
 }

@@ -31,7 +31,7 @@ class TotalWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(left: 12.0),
+              margin: const EdgeInsets.only(left: 12.0),
               child: Text(
                 'TOTAL',
                 style: LocationTextStyle.priceTextStyle,

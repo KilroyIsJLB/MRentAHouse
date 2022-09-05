@@ -6,30 +6,52 @@ import 'package:locations/models/habitation.dart';
 import 'package:locations/models/typehabitat.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
+import 'package:locations/views/share/bottom_navigation_bar_widget.dart';
 
 import 'services/habitation_service.dart';
 import 'views/habitation_details.dart';
 import 'views/habitation_list.dart';
+import 'views/location_list.dart';
+import 'views/login_page.dart';
+import 'views/profil.dart';
+import 'views/validation_location.dart';
 
 void main() {
   Intl.defaultLocale = 'fr';
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final backgroundColor =
+  LocationStyle.colorToMaterialColor(LocationStyle.backgroundColorDarkBlue);
+  final backgroundLightColor = LocationStyle.colorToMaterialColor(
+      LocationStyle.backgroundColorDarkBlueLight);
 
-  // This widget is the root of your application.
+  MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Locations',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: backgroundColor,
+        backgroundColor: backgroundColor,
+        bottomAppBarColor: backgroundColor,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  LocationStyle.backgroundColorDarkBlueLight)),
+        ),
       ),
       home: MyHomePage(title: 'Mes locations'),
+      // Le code précédent ...
+      routes: {
+        Profil.routeName: (context) => const Profil(),
+        LoginPage.routeName: (context) => const LoginPage('/'),
+        LocationList.routeName: (context) => const LocationList(),
+        ValidationLocation.routeName: (context) => const ValidationLocation(),
+      },
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('fr')],
     );
@@ -58,11 +80,12 @@ class MyHomePage extends StatelessWidget {
           children: [
             const SizedBox(height: 30),
             _buildTypeHabitat(context),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildDerniereLocation(context),
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(0),
     );
   }
 
@@ -97,7 +120,7 @@ class MyHomePage extends StatelessWidget {
           color: LocationStyle.backgroundColorDarkBlue,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        margin: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: () {
             Navigator.push(
@@ -114,7 +137,7 @@ class MyHomePage extends StatelessWidget {
               icon,
               color: Colors.white70,
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
             Text(
               typeHabitat.libelle,
               style: LocationTextStyle.regularWhiteTextStyle,
@@ -126,7 +149,7 @@ class MyHomePage extends StatelessWidget {
   }
 
   _buildDerniereLocation(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 240,
       child: ListView.builder(
         itemCount: _habitations.length,
@@ -143,7 +166,7 @@ class MyHomePage extends StatelessWidget {
 
     return Container(
       width: 240,
-      margin: EdgeInsets.all(4.0),
+      margin: const EdgeInsets.all(4.0),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -168,7 +191,7 @@ class MyHomePage extends StatelessWidget {
             ),
             Row(
               children: [
-                Icon(Icons.location_on_outlined),
+                const Icon(Icons.location_on_outlined),
                 Text(
                   habitation.adresse,
                   style: LocationTextStyle.regularTextStyle,

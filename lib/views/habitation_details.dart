@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:locations/models/habitation.dart';
+import 'package:locations/views/share/bottom_navigation_bar_widget.dart';
 import 'package:locations/views/share/habitation_features_widget.dart';
 
 import '../share/location_style.dart';
@@ -23,7 +24,7 @@ class _HabitationDetailsState extends State<HabitationDetails> {
         title: Text(widget._habitation.libelle),
       ),
       body: ListView(
-        padding: EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
@@ -33,12 +34,12 @@ class _HabitationDetailsState extends State<HabitationDetails> {
             ),
           ),
           Container(
-            margin: EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
             child: Text(widget._habitation.libelle),
           ),
           Container(
-            padding: EdgeInsets.only(bottom: 2.0),
-            margin: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(bottom: 2.0),
+            margin: const EdgeInsets.all(8.0),
             child: Text(widget._habitation.adresse),
           ),
           HabitationFeaturesWidget(widget._habitation),
@@ -47,6 +48,7 @@ class _HabitationDetailsState extends State<HabitationDetails> {
           _buildRentButton(),
         ],
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(2),
     );
   }
 
@@ -59,25 +61,25 @@ class _HabitationDetailsState extends State<HabitationDetails> {
         color: LocationStyle.backgroundColorDarkBlue,
         borderRadius: BorderRadius.circular(8.0),
       ),
-      margin: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0),
+            margin: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
               format.format(widget._habitation.prixmois),
               style: LocationTextStyle.priceWhiteTextStyle,
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 8.0),
+            margin: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ResaLocation(widget._habitation)));
               },
-              child: Text('Réserver'),
+              child: const Text('Réserver'),
             ),
           ),
         ],
@@ -98,8 +100,8 @@ class _HabitationDetailsState extends State<HabitationDetails> {
         children: Iterable.generate(
           widget._habitation.options.length,
           (i) => Container(
-            padding: EdgeInsets.only(left: 15),
-            margin: EdgeInsets.all(2.0),
+            padding: const EdgeInsets.only(left: 15),
+            margin: const EdgeInsets.all(2.0),
             width: width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +159,7 @@ class _HabitationDetailsState extends State<HabitationDetails> {
 
   _buildDivider(String text) {
     return Row(children: [
-      SizedBox(
+      const SizedBox(
         width: 8,
       ),
       Text(
@@ -167,7 +169,7 @@ class _HabitationDetailsState extends State<HabitationDetails> {
       Expanded(
         child: Container(
             margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-            child: Divider(
+            child: const Divider(
               color: LocationStyle.backgroundColorDarkBlue,
               height: 36,
             )),

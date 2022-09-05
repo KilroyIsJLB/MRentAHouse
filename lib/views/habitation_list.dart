@@ -6,6 +6,7 @@ import 'package:locations/views/share/habitation_option.dart';
 
 import '../services/habitation_service.dart';
 import 'habitation_details.dart';
+import 'share/bottom_navigation_bar_widget.dart';
 
 class HabitationList extends StatelessWidget {
   final HabitationService service = HabitationService();
@@ -30,6 +31,7 @@ class HabitationList extends StatelessWidget {
           itemExtent: 285,
         ),
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(2),
     );
   }
 
@@ -46,7 +48,7 @@ class HabitationList extends StatelessWidget {
         },
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 150,
               width: MediaQuery.of(context).size.width,
               child: ClipRRect(
@@ -67,34 +69,32 @@ class HabitationList extends StatelessWidget {
   _buildDetails(Habitation habitation) {
     var format = NumberFormat("### €");
 
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: ListTile(
-                  title: Text(habitation.libelle),
-                  subtitle: Text(habitation.adresse),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: ListTile(
+                title: Text(habitation.libelle),
+                subtitle: Text(habitation.adresse),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(
+                format.format(habitation.prixmois),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Roboto',
+                  fontSize: 22,
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  format.format(habitation.prixmois),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto',
-                    fontSize: 22,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          HabitationFeaturesWidget(habitation),
-        ],
-      ),
+            ),
+          ],
+        ),
+        HabitationFeaturesWidget(habitation),
+      ],
     );
   }
 }
