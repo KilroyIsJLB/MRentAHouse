@@ -5,6 +5,7 @@ import 'package:locations/views/share/habitation_features_widget.dart';
 
 import '../share/location_style.dart';
 import '../share/location_text_style.dart';
+import 'resa_location.dart';
 
 class HabitationDetails extends StatefulWidget {
   final Habitation _habitation;
@@ -71,7 +72,13 @@ class _HabitationDetailsState extends State<HabitationDetails> {
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text('Réserver'),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ResaLocation(widget._habitation)));
+              },
+              child: Text('Réserver'),
+            ),
           ),
         ],
       ),
