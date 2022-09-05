@@ -6,7 +6,10 @@ import 'package:locations/models/typehabitat.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'services/habitation_service.dart';
+import 'views/habitation_details.dart';
 import 'views/habitation_list.dart';
 
 void main() {
@@ -19,6 +22,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('fr_FR', null);
+
     return MaterialApp(
       title: 'Locations',
       theme: ThemeData(
@@ -137,34 +142,43 @@ class MyHomePage extends StatelessWidget {
     return Container(
       width: 240,
       margin: EdgeInsets.all(4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image.asset(
-              'assets/images/locations/${habitation.image}',
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-          Text(
-            habitation.libelle,
-            style: LocationTextStyle.regularTextStyle,
-          ),
-          Row(
-            children: [
-              Icon(Icons.location_on_outlined),
-              Text(
-                habitation.adresse,
-                style: LocationTextStyle.regularTextStyle,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HabitationDetails(habitation)),
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.asset(
+                'assets/images/locations/${habitation.image}',
+                fit: BoxFit.fitWidth,
               ),
-            ],
-          ),
-          Text(
-            format.format(habitation.prixmois),
-            style: LocationTextStyle.boldTextStyle,
-          ),
-        ],
+            ),
+            Text(
+              habitation.libelle,
+              style: LocationTextStyle.regularTextStyle,
+            ),
+            Row(
+              children: [
+                Icon(Icons.location_on_outlined),
+                Text(
+                  habitation.adresse,
+                  style: LocationTextStyle.regularTextStyle,
+                ),
+              ],
+            ),
+            Text(
+              format.format(habitation.prixmois),
+              style: LocationTextStyle.boldTextStyle,
+            ),
+          ],
+        ),
       ),
     );
   }

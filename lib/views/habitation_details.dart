@@ -98,7 +98,6 @@ class _HabitationDetailsState extends State<HabitationDetails> {
         children: Iterable.generate(
           widget._habitation.options.length,
           (i) => Container(
-            /** A FAIRE **/
             padding: EdgeInsets.only(left: 15),
             margin: EdgeInsets.all(2.0),
             width: width,
