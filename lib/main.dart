@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 
 import 'package:locations/models/habitation.dart';
@@ -6,13 +7,13 @@ import 'package:locations/models/typehabitat.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
 
-import 'package:intl/date_symbol_data_local.dart';
-
 import 'services/habitation_service.dart';
 import 'views/habitation_details.dart';
 import 'views/habitation_list.dart';
 
 void main() {
+  Intl.defaultLocale = 'fr';
+
   runApp(const MyApp());
 }
 
@@ -22,7 +23,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting('fr_FR', null);
 
     return MaterialApp(
       title: 'Locations',
@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Mes locations'),
+      localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
+      supportedLocales: const [Locale('en'), Locale('fr')],
     );
   }
 }

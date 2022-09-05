@@ -28,7 +28,6 @@ class _ResaLocationState extends State<ResaLocation> {
   List<OptionPayanteCheck> optionPayanteChecks = [];
 
   var format = NumberFormat("### €");
-  /** Le reste du code **/
   double get prixTotal {
     double prix = widget._habitation.prixmois;
     if (optionPayanteChecks.isNotEmpty) {
@@ -90,8 +89,6 @@ class _ResaLocationState extends State<ResaLocation> {
   }
 
   _buildDates() {
-    Intl.defaultLocale = 'fr';
-
     return Container(
       padding: const EdgeInsets.only(left: 16.0, right: 12.0),
       child: Row(
