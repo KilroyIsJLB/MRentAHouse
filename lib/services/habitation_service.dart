@@ -1,12 +1,21 @@
 import '../models/habitation.dart';
 import '../models/typehabitat.dart';
-import '../repositories/habitation_api_data_impl.dart';
+import '../repositories/habitation_api_client.dart';
+import '../repositories/habitation_api_client_impl.dart';
+import '../repositories/type_habitat_api_client.dart';
+import '../repositories/type_habitat_api_client_impl.dart';
+// import '../repositories/habitation_api_data_impl.dart';
 
 class HabitationService {
-  final HabitationApiData habitationApiClient;
+  final HabitationApiClient habitationApiClient;
+  final TypeHabitatApiClient typeHabitatApiClient;
+
+  /*HabitationService() :
+        habitationApiClient = HabitationApiData();*/
 
   HabitationService() :
-        habitationApiClient = HabitationApiData();
+        habitationApiClient = HabitationApiClientImpl('habitations'),
+        typeHabitatApiClient = TypeHabitatApiClientImpl('typehabitats');
 
   Future<List<TypeHabitat>> getTypeHabitats() {
     return habitationApiClient.getTypeHabitats();

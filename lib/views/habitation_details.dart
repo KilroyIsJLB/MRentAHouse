@@ -68,7 +68,7 @@ class _HabitationDetailsState extends State<HabitationDetails> {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              format.format(widget._habitation.prixmois),
+              format.format(widget._habitation.prixnuit),
               style: LocationTextStyle.priceWhiteTextStyle,
             ),
           ),

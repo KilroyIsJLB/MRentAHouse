@@ -100,7 +100,7 @@ class HabitationList extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Text(
-                format.format(habitation.prixmois),
+                format.format(habitation.prixnuit),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Roboto',

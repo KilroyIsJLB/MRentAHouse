@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:locations/models/location.dart';
@@ -14,7 +15,7 @@ class LocationApiClientImpl implements LocationApiClient {
 
     try {
       final response = await http.get(Uri.parse('$uri/locations/locations.json'));
-      if (response.statusCode == 200) {
+      if (response.statusCode == HttpStatus.ok) {
         // var json = jsonDecode(response.body); --> problèmes avec les accents
         var json = jsonDecode(utf8.decode(response.bodyBytes));
         for(final value in json) {
@@ -35,7 +36,7 @@ class LocationApiClientImpl implements LocationApiClient {
   Future<Location> getLocation(int id) async {
     try {
       final response = await http.get(Uri.parse('$uri/locations/location.json'));
-      if (response.statusCode == 200) {
+      if (response.statusCode == HttpStatus.ok) {
         // var json = jsonDecode(response.body); --> problèmes avec les accents
         var json = jsonDecode(utf8.decode(response.bodyBytes));
         return Location.fromJson(json);

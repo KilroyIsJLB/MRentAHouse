@@ -24,13 +24,14 @@ class ResaLocation extends StatefulWidget {
 
 class _ResaLocationState extends State<ResaLocation> {
   DateTime dateDebut = DateTime.now();
-  DateTime dateFin = DateTime.now();
+  DateTime dateFin = DateTime.now().add(const Duration(days: 1));
   String nbPersonnes = '1';
   List<OptionPayanteCheck> optionPayanteChecks = [];
 
   var format = NumberFormat("### €");
   double get prixTotal {
-    double prix = widget._habitation.prixmois;
+    Duration duree = dateFin.difference(dateDebut);
+    double prix = widget._habitation.prixnuit * duree.inDays;
     if (optionPayanteChecks.isNotEmpty) {
       optionPayanteChecks.forEach((element) {
         if (element.checked) {
@@ -66,7 +67,7 @@ class _ResaLocationState extends State<ResaLocation> {
   dateTimeRangePicker() async {
     DateTimeRange? datePicked = await showDateRangePicker(
       context: context,
-      firstDate: DateTime(DateTime.now().year),
+      firstDate: DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 2),
       initialDateRange: DateTimeRange(start: dateDebut, end: dateFin),
       cancelText: 'Annuler',
@@ -76,7 +77,11 @@ class _ResaLocationState extends State<ResaLocation> {
     if (datePicked != null) {
       setState(() {
         dateDebut = datePicked.start;
-        dateFin = datePicked.end;
+        if (dateFin.compareTo(dateDebut) == 0) {
+          dateFin = dateDebut.add(const Duration(days: 1));
+        } else {
+          dateFin = datePicked.end;
+        }
       });
     }
   }
@@ -89,51 +94,39 @@ class _ResaLocationState extends State<ResaLocation> {
     );
   }
 
+  _buildDateRow(DateTime dateTime) {
+    return Row(
+      children: [
+        const Icon(Icons.calendar_today_outlined),
+        const SizedBox(width: 8.0),
+        Center(
+          child: Text(
+            DateFormat('d MMM y').format(dateTime),
+            style: LocationTextStyle.largeTextStyle,
+          ),
+        ),
+      ],
+    );
+  }
+
   _buildDates() {
     return Container(
       padding: const EdgeInsets.only(left: 16.0, right: 12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () {
-              dateTimeRangePicker();
-            },
-            child: Row(
-              children: [
-                const Icon(Icons.calendar_today_outlined),
-                const SizedBox(width: 8.0),
-                Center(
-                  child: Text(
-                    DateFormat('d MMM y').format(dateDebut),
-                    style: LocationTextStyle.largeTextStyle,
-                  ),
-                ),
-              ],
+      child: GestureDetector(
+        onTap: () {
+          dateTimeRangePicker();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildDateRow(dateDebut),
+            const CircleAvatar(
+              backgroundColor: LocationStyle.backgroundColorDarkBlue,
+              child: Icon(Icons.arrow_forward),
             ),
-          ),
-          const CircleAvatar(
-            backgroundColor: LocationStyle.backgroundColorDarkBlue,
-            child: Icon(Icons.arrow_forward),
-          ),
-          GestureDetector(
-            onTap: () {
-              dateTimeRangePicker();
-            },
-            child: Row(
-              children: [
-                const Icon(Icons.calendar_today_outlined),
-                const SizedBox(width: 8.0),
-                Center(
-                  child: Text(
-                    DateFormat('d MMM y').format(dateFin),
-                    style: LocationTextStyle.largeTextStyle,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+            _buildDateRow(dateFin),
+          ],
+        ),
       ),
     );
   }
@@ -218,8 +211,8 @@ class _ResaLocationState extends State<ResaLocation> {
       margin: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(LocationStyle.backgroundColorDarkBlue)
-        ),
+            backgroundColor: MaterialStateProperty.all<Color>(
+                LocationStyle.backgroundColorDarkBlue)),
         onPressed: () {
           print('_buildRentButton pressed');
           Navigator.push(
@@ -227,7 +220,10 @@ class _ResaLocationState extends State<ResaLocation> {
               MaterialPageRoute(
                   builder: (context) => const ValidationLocation()));
         },
-        child: Text('Louer', style: LocationTextStyle.priceWhiteTextStyle,),
+        child: Text(
+          'Louer',
+          style: LocationTextStyle.priceWhiteTextStyle,
+        ),
       ),
     );
   }

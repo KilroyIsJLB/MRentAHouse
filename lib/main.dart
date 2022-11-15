@@ -234,7 +234,7 @@ class MyHomePage extends StatelessWidget {
               ],
             ),
             Text(
-              format.format(habitation.prixmois),
+              format.format(habitation.prixnuit),
               style: LocationTextStyle.boldTextStyle,
             ),
           ],
