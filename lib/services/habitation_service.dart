@@ -4,18 +4,19 @@ import '../repositories/habitation_api_client.dart';
 import '../repositories/habitation_api_client_impl.dart';
 import '../repositories/type_habitat_api_client.dart';
 import '../repositories/habitation_api_data_impl.dart';
+import '../repositories/type_habitat_api_client_impl.dart';
 
 class HabitationService {
   final HabitationApiClient habitationApiClient;
   final TypeHabitatApiClient typeHabitatApiClient;
 
-  HabitationService() :
-        habitationApiClient = HabitationApiData(),
-        typeHabitatApiClient = HabitationApiData();
-
   /*HabitationService() :
+        habitationApiClient = HabitationApiData(),
+        typeHabitatApiClient = HabitationApiData();*/
+
+  HabitationService() :
         habitationApiClient = HabitationApiClientImpl('habitations'),
-        typeHabitatApiClient = TypeHabitatApiClientImpl('typehabitats');*/
+        typeHabitatApiClient = TypeHabitatApiClientImpl('typehabitats');
 
   Future<List<TypeHabitat>> getTypeHabitats() {
     return typeHabitatApiClient.getTypeHabitats();

@@ -4,7 +4,7 @@ import 'base_api_client.dart';
 import 'type_habitat_api_client.dart';
 
 class TypeHabitatApiClientImpl extends BaseApPiClient<TypeHabitat> implements TypeHabitatApiClient {
-  static const String uri = 'https://wshabitation.montpellier.epsi.fr/api/v1/';
+  static const String uri = 'https://wshabitation.montpellier.epsi.fr/api/v1';
 
   TypeHabitatApiClientImpl(super.baseUri);
 
@@ -15,7 +15,7 @@ class TypeHabitatApiClientImpl extends BaseApPiClient<TypeHabitat> implements Ty
 
   @override
   Future<List<TypeHabitat>> getTypeHabitats() {
-    return super.getAll('typehabitats');
+    return super.getAll('$uri/typehabitats');
   }
 
 }

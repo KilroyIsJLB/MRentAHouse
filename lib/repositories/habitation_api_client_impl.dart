@@ -9,7 +9,7 @@ import 'package:locations/repositories/base_api_client.dart';
 import 'package:locations/repositories/habitation_api_client.dart';
 
 class HabitationApiClientImpl extends BaseApPiClient<Habitation> implements HabitationApiClient {
-  static const String uri = 'https://wshabitation.montpellier.epsi.fr/api/v1/';
+  static const String uri = 'https://wshabitation.montpellier.epsi.fr/api/v1';
 
   HabitationApiClientImpl(super.baseUri);
 
