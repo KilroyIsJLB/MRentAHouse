@@ -1,12 +1,14 @@
 
 
+import 'package:locations/repositories/type_habitat_api_client.dart';
+
 import '../models/habitation.dart';
 import '../models/habitations_data.dart';
 import '../models/typehabitat.dart';
 import '../models/typehabitat_data.dart';
 import 'habitation_api_client.dart';
 
-class HabitationApiData implements HabitationApiClient {
+class HabitationApiData implements HabitationApiClient, TypeHabitatApiClient {
   final List<Habitation> _habitations = HabitationsData.buildList();
 
   @override

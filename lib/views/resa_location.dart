@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import 'package:locations/models/habitation.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
+import 'package:locations/views/login_page.dart';
 import 'package:locations/views/share/total_widget.dart';
 import 'package:locations/views/validation_location.dart';
+
+import '../bloc/user_cubit.dart';
 
 class OptionPayanteCheck extends OptionPayante {
   bool checked;
@@ -30,8 +34,9 @@ class _ResaLocationState extends State<ResaLocation> {
 
   var format = NumberFormat("### €");
   double get prixTotal {
-    Duration duree = dateFin.difference(dateDebut);
-    double prix = widget._habitation.prixnuit * duree.inDays;
+    Duration duration = dateFin.difference(dateDebut);
+    double prix = widget._habitation.prixnuit * duration.inDays;
+
     if (optionPayanteChecks.isNotEmpty) {
       optionPayanteChecks.forEach((element) {
         if (element.checked) {
@@ -58,7 +63,7 @@ class _ResaLocationState extends State<ResaLocation> {
           _buildNbPersonnes(),
           _buildOptionsPayantes(context),
           TotalWidget(prixTotal),
-          _buildRentButton(),
+          _buildRentButton(context),
         ],
       ),
     );
@@ -68,7 +73,7 @@ class _ResaLocationState extends State<ResaLocation> {
     DateTimeRange? datePicked = await showDateRangePicker(
       context: context,
       firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 2),
+      lastDate: DateTime(DateTime.now().year + 1),
       initialDateRange: DateTimeRange(start: dateDebut, end: dateFin),
       cancelText: 'Annuler',
       confirmText: 'Valider',
@@ -77,8 +82,8 @@ class _ResaLocationState extends State<ResaLocation> {
     if (datePicked != null) {
       setState(() {
         dateDebut = datePicked.start;
-        if (dateFin.compareTo(dateDebut) == 0) {
-          dateFin = dateDebut.add(const Duration(days: 1));
+        if (datePicked.end.compareTo(dateDebut) == 0) {
+          dateFin = datePicked.end.add(const Duration(days: 1));
         } else {
           dateFin = datePicked.end;
         }
@@ -94,7 +99,7 @@ class _ResaLocationState extends State<ResaLocation> {
     );
   }
 
-  _buildDateRow(DateTime dateTime) {
+  _buildRowDate(DateTime dateTime) {
     return Row(
       children: [
         const Icon(Icons.calendar_today_outlined),
@@ -119,12 +124,12 @@ class _ResaLocationState extends State<ResaLocation> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildDateRow(dateDebut),
+            _buildRowDate(dateDebut),
             const CircleAvatar(
-              backgroundColor: LocationStyle.backgroundColorDarkBlue,
+              //backgroundColor: LocationStyle.backgroundColorDarkBlue,
               child: Icon(Icons.arrow_forward),
             ),
-            _buildDateRow(dateFin),
+            _buildRowDate(dateFin),
           ],
         ),
       ),
@@ -202,7 +207,7 @@ class _ResaLocationState extends State<ResaLocation> {
     }
   }
 
-  _buildRentButton() {
+  _buildRentButton(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: LocationStyle.backgroundColorDarkBlue,
@@ -212,13 +217,23 @@ class _ResaLocationState extends State<ResaLocation> {
       child: ElevatedButton(
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
-                LocationStyle.backgroundColorDarkBlue)),
+                LocationStyle.backgroundColorDarkBlue),),
         onPressed: () {
-          print('_buildRentButton pressed');
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ValidationLocation()));
+          // Si l'utilisateur n'est pas loggué,
+          // il est redirigé vers la page de login
+          // Obtention de l'état actuel
+          UserState state = context.read<UserCubit>().state;
+          if (state.user.isEmpty()) {
+            /*Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoginPage(ValidationLocation.routeName)));*/
+            Navigator.pushNamed(context, LoginPage.routeName, arguments: LoginPageArgument(ValidationLocation.routeName));
+          } else {
+            /*Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const ValidationLocation()),
+                    (route) => route.isFirst);*/
+            Navigator.pushNamedAndRemoveUntil(context, ValidationLocation.routeName, (route) => route.isFirst);
+          }
         },
         child: Text(
           'Louer',
@@ -227,4 +242,5 @@ class _ResaLocationState extends State<ResaLocation> {
       ),
     );
   }
+
 }

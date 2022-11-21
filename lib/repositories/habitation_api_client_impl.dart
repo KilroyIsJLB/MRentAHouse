@@ -20,125 +20,33 @@ class HabitationApiClientImpl extends BaseApPiClient<Habitation> implements Habi
 
   @override
   Future<List<Habitation>> getHabitations() async {
-    return super.getAll(uri);
+    return super.getAll("$uri/habitations");
   }
 
   @override
   Future<Habitation> getHabitation(int id) async {
-    return super.getOne(uri, id);
-  }
-
-  @override
-  Future<List<TypeHabitat>> getTypeHabitats() async {
-    List<TypeHabitat> list = [];
-
-    try {
-      final response = await http.get(Uri.parse('$uri/typehabitats'));
-      if (response.statusCode == HttpStatus.ok) {
-        var json = jsonDecode(utf8.decode(response.bodyBytes));
-        for(final value in json) {
-          list.add(TypeHabitat.fromJson(value));
-        }
-      } else {
-        throw Exception("Impossible de récupérer les type d'habitations");
-      }
-    } catch(e) {
-      rethrow;
-    }
-
-    return list;
-  }
-
-
-
-
-
-  @override
-  Future<List<Habitation>> getAppartements() {
-    // TODO: implement getAppartements
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Habitation>> getHabitationsById(List<int> habitationsIds) {
-    // TODO: implement getHabitationsById
-    throw UnimplementedError();
+    return super.getOne("$uri/habitations/$id");
   }
 
   @override
   Future<List<Habitation>> getHabitationsTop10() {
-    // TODO: implement getHabitationsTop10
-    throw UnimplementedError();
+    return super.getAll("$uri/habitations/top10");
+  }
+
+  @override
+  Future<List<Habitation>> getHabitationsById(List<int> habitationsIds) async {
+    List<Habitation> habitations = await getHabitations();
+    return habitations.takeWhile((value) => habitationsIds.contains(value.id)).toList();
+  }
+
+  @override
+  Future<List<Habitation>> getAppartements() {
+    return super.getAll("$uri/habitations/typehabitat/${TypeHabitat.APPARTEMENT}");
   }
 
   @override
   Future<List<Habitation>> getMaisons() {
-    // TODO: implement getMaisons
-    throw UnimplementedError();
+    return super.getAll("$uri/habitations/typehabitat/${TypeHabitat.MAISON}");
   }
 
 }
-
-/*
-
-class HabitationApiClientImpl implements HabitationApiClient {
-  static const String uri = 'https://wshabitation.montpellier.epsi.fr/api/v1/';
-
-  @override
-  Future<List<Habitation>> getHabitations() async {
-    List<Habitation> list = [];
-
-    try {
-      final response = await http.get(Uri.parse('$uri/habitations'));
-      if (response.statusCode == HttpStatus.ok) {
-        var json = jsonDecode(utf8.decode(response.bodyBytes));
-        for(final value in json) {
-          list.add(Habitation.fromJson(value));
-        }
-      } else {
-        throw Exception('Impossible de récupérer les habitations');
-      }
-    } catch(e) {
-      rethrow;
-    }
-
-    return list;
-  }
-
-  @override
-  Future<Habitation> getHabitation(int id) async {
-    try {
-      final response = await http.get(Uri.parse('$uri/habitations/$id'));
-      if (response.statusCode == HttpStatus.ok) {
-        var json = jsonDecode(utf8.decode(response.bodyBytes));
-        return Habitation.fromJson(json);
-      } else {
-        throw Exception('Impossible de récupérer les habitations');
-      }
-    } catch(e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<List<TypeHabitat>> getTypeHabitats() async {
-    List<TypeHabitat> list = [];
-
-    try {
-      final response = await http.get(Uri.parse('$uri/typehabitats'));
-      if (response.statusCode == HttpStatus.ok) {
-        var json = jsonDecode(utf8.decode(response.bodyBytes));
-        for(final value in json) {
-          list.add(TypeHabitat.fromJson(value));
-        }
-      } else {
-        throw Exception("Impossible de récupérer les type d'habitations");
-      }
-    } catch(e) {
-      rethrow;
-    }
-
-    return list;
-  }
-
- */

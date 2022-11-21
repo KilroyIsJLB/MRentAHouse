@@ -14,7 +14,7 @@ abstract class BaseApPiClient<T> {
     List<T> list = [];
 
     try {
-      final response = await http.get(Uri.parse('$uri/typehabitats'));
+      final response = await http.get(Uri.parse(uri));
       if (response.statusCode == HttpStatus.ok) {
         var json = jsonDecode(utf8.decode(response.bodyBytes));
         for(final value in json) {
@@ -30,9 +30,9 @@ abstract class BaseApPiClient<T> {
     return list;
   }
 
-  Future<T> getOne(String uri, int id) async {
+  Future<T> getOne(String uri) async {
     try {
-      final response = await http.get(Uri.parse('$uri/habitations/$id'));
+      final response = await http.get(Uri.parse(uri));
       if (response.statusCode == HttpStatus.ok) {
         var json = jsonDecode(utf8.decode(response.bodyBytes));
         return createFromJson(json);

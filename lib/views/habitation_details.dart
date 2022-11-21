@@ -138,8 +138,8 @@ class _HabitationDetailsState extends State<HabitationDetails> {
         children: Iterable.generate(
           widget._habitation.optionpayantes.length,
           (i) => Container(
-            padding: EdgeInsets.only(left: 15),
-            margin: EdgeInsets.all(2.0),
+            padding: const EdgeInsets.only(left: 15),
+            margin: const EdgeInsets.all(2.0),
             width: width,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

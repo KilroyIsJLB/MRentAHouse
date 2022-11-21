@@ -4,13 +4,15 @@ import 'package:collection/collection.dart';
 import '../models/habitation.dart';
 import '../repositories/location_api_client.dart';
 import '../repositories/location_api_client_impl.dart';
+import '../repositories/location_api_data_impl.dart';
 import 'habitation_service.dart';
 
 class LocationService {
   final LocationApiClient locationApiClient;
 
   LocationService() :
-        locationApiClient = LocationApiClientImpl(); // LocationApiData()
+        locationApiClient = LocationApiData();
+  //locationApiClient = LocationApiClientImpl();
 
   Future<List<Location>> getLocations() async {
     List<Location> list = await locationApiClient.getLocations();

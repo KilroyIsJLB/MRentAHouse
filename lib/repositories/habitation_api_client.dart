@@ -4,8 +4,6 @@ import '../models/typehabitat.dart';
 
 
 abstract class HabitationApiClient {
-  Future<List<TypeHabitat>> getTypeHabitats();
-
   Future<List<Habitation>> getHabitationsTop10();
   Future<List<Habitation>> getMaisons();
   Future<List<Habitation>> getAppartements();

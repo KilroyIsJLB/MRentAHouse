@@ -48,7 +48,7 @@ class HabitationsData {
       "lits": 3,
       "sdb": 1,
       "superficie": 92,
-      "prixnuit": 600.0
+      "prixnuit": 90.0
     },
     {
       "id": 2,
@@ -77,7 +77,7 @@ class HabitationsData {
       "lits": 2,
       "sdb": 1,
       "superficie": 50,
-      "prixnuit": 555.0
+      "prixnuit": 55.0
     },
     {
       "id": 3,
@@ -94,7 +94,7 @@ class HabitationsData {
       "lits": 3,
       "sdb": 1,
       "superficie": 100,
-      "prixnuit": 500.0
+      "prixnuit": 50.0
     },
     {
       "id": 4,
@@ -193,7 +193,7 @@ class HabitationsData {
       "lits": 4,
       "sdb": 1,
       "superficie": 120,
-      "prixnuit": 600.0
+      "prixnuit": 60.0
     },
     {
       "id": 8,
@@ -227,7 +227,7 @@ class HabitationsData {
       "lits": 4,
       "sdb": 1,
       "superficie": 120,
-      "prixnuit": 600.0
+      "prixnuit": 60.0
     },
     {
       "id": 10,
@@ -451,7 +451,7 @@ class HabitationsData {
       "lits": 3,
       "sdb": 1,
       "superficie": 70,
-      "prixnuit": 35.0
+      "prixnuit": 30.0
     },
     {
       "id": 16,
@@ -535,7 +535,7 @@ class HabitationsData {
       "lits": 3,
       "sdb": 1,
       "superficie": 70,
-      "prixnuit": 35.0
+      "prixnuit": 70.0
     }
   ];
 

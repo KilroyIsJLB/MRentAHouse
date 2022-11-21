@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 
@@ -7,7 +8,10 @@ import 'package:locations/models/typehabitat.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
 import 'package:locations/views/share/bottom_navigation_bar_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bloc/user_cubit.dart';
+import 'models/user.dart';
 import 'services/habitation_service.dart';
 import 'views/habitation_details.dart';
 import 'views/habitation_list.dart';
@@ -19,19 +23,34 @@ import 'views/validation_location.dart';
 void main() {
   Intl.defaultLocale = 'fr';
 
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
+  App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return BlocProvider(
+      create: (_) => UserCubit(),
+      child: AppView(),
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
   final backgroundColor =
   LocationStyle.colorToMaterialColor(LocationStyle.backgroundColorDarkBlue);
   final backgroundLightColor = LocationStyle.colorToMaterialColor(
       LocationStyle.backgroundColorDarkBlueLight);
 
-  MyApp({Key? key}) : super(key: key);
+  AppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    _readUserPreferences(context);
+
     return MaterialApp(
       title: 'Locations',
       theme: ThemeData(
@@ -55,6 +74,24 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('fr')],
     );
+  }
+
+  void _readUserPreferences(BuildContext context) {
+    // obtain shared preferences
+    final Future<SharedPreferences> prefs  = SharedPreferences.getInstance();
+    prefs.then((prefs) {
+      // get value
+      String email = prefs.getString('RAH_email') ?? '';
+      email = ''; // TODO : remove
+      if (email.isNotEmpty) {
+        String password = prefs.getString('RAH_pwd') ?? '';
+        // TODO : faire la connection Utilisateur;
+
+        // Obtention de l'objet Cubit
+        UserCubit user = context.read<UserCubit>();
+        user.authenticated(User(email));
+      }
+    });
   }
 }
 
