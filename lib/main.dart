@@ -82,14 +82,13 @@ class AppView extends StatelessWidget {
     prefs.then((prefs) {
       // get value
       String email = prefs.getString('RAH_email') ?? '';
-      email = ''; // TODO : remove
       if (email.isNotEmpty) {
         String password = prefs.getString('RAH_pwd') ?? '';
         // TODO : faire la connection Utilisateur;
 
         // Obtention de l'objet Cubit
         UserCubit user = context.read<UserCubit>();
-        user.authenticated(User(email));
+        user.authenticated(User(email, nbLocations: 2));
       }
     });
   }

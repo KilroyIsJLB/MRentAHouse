@@ -3,8 +3,8 @@ class TypeHabitat {
   int id;
   String libelle;
 
-  static const APPARTEMENT = 1;
   static const MAISON = 1;
+  static const APPARTEMENT = 2;
 
   TypeHabitat(this.id, this.libelle);
   TypeHabitat.fromJson(Map<String, dynamic> json)

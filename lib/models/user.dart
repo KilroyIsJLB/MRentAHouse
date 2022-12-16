@@ -5,10 +5,9 @@ class User {
   final String email;
   final String nom;
   final String prenom;
+  int nbLocations;
 
-  int nbLocations = 0;
-
-  User(this.email, {this.prenom = '', this.nom = ''});
+  User(this.email, {this.prenom = '', this.nom = '', this.nbLocations = 0});
 
   bool isEmpty() {
     return email == '-';
