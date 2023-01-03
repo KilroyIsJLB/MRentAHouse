@@ -11,8 +11,8 @@ class LocationService {
   final LocationApiClient locationApiClient;
 
   LocationService() :
-        locationApiClient = LocationApiData();
-  //locationApiClient = LocationApiClientImpl();
+        //locationApiClient = LocationApiData();
+        locationApiClient = LocationApiClientImpl();
 
   Future<List<Location>> getLocations() async {
     List<Location> list = await locationApiClient.getLocations();
@@ -39,5 +39,13 @@ class LocationService {
 
   Future<Location> getLocation(int id) {
     return locationApiClient.getLocation(id);
+  }
+
+  Future<Location> addLocation(Location location) {
+    return locationApiClient.addLocation(location);
+  }
+
+  Future<bool> deleteLocation(int id) {
+    return locationApiClient.deleteLocation(id);
   }
 }

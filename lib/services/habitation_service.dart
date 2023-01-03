@@ -15,8 +15,8 @@ class HabitationService {
         typeHabitatApiClient = HabitationApiData();*/
 
   HabitationService() :
-        habitationApiClient = HabitationApiClientImpl('habitations'),
-        typeHabitatApiClient = TypeHabitatApiClientImpl('typehabitats');
+        habitationApiClient = HabitationApiClientImpl(),
+        typeHabitatApiClient = TypeHabitatApiClientImpl();
 
   Future<List<TypeHabitat>> getTypeHabitats() {
     return typeHabitatApiClient.getTypeHabitats();

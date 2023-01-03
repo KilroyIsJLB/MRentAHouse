@@ -10,4 +10,12 @@ class Facture {
       : id = json['id'],
         date = DateTime.parse(json['date']),
         adresse = json['adresse'];
+
+
+  Map<String, dynamic> toJson() =>
+      {
+        'id': id,
+        'adresse': adresse,
+        'date': date
+      };
 }

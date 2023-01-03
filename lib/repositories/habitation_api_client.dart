@@ -1,6 +1,5 @@
 
 import '../models/habitation.dart';
-import '../models/typehabitat.dart';
 
 
 abstract class HabitationApiClient {

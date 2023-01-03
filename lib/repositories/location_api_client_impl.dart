@@ -1,52 +1,39 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:http/http.dart' as http;
 import 'package:locations/models/location.dart';
+import 'package:locations/repositories/base_api_client.dart';
 
 import 'location_api_client.dart';
 
-class LocationApiClientImpl implements LocationApiClient {
-  static const String uri = 'http://10.0.2.2/api/';
+class LocationApiClientImpl extends BaseApPiClient<Location> implements LocationApiClient {
+  static const String uri = 'http://10.0.2.2:7117/api/v1/locations';
+
+  LocationApiClientImpl() : super(uri);
+
+  @override
+  Location createFromJson(Map<String, dynamic> json) {
+    return Location.fromJson(json);
+  }
+  @override
+  Map<String, dynamic> convertToJson(Location t) {
+    return t.toJson();
+  }
 
   @override
   Future<List<Location>> getLocations() async {
-    List<Location> list = [];
-
-    try {
-      final response = await http.get(Uri.parse('$uri/locations/locations.json'));
-      if (response.statusCode == HttpStatus.ok) {
-        // var json = jsonDecode(response.body); --> problèmes avec les accents
-        var json = jsonDecode(utf8.decode(response.bodyBytes));
-        for(final value in json) {
-          list.add(Location.fromJson(value));
-        }
-
-      } else {
-        throw Exception('Impossible de récupérer les locations');
-      }
-    } catch(e) {
-      rethrow;
-    }
-
-    return list;
+    return super.getAll("");
   }
 
   @override
   Future<Location> getLocation(int id) async {
-    try {
-      final response = await http.get(Uri.parse('$uri/locations/location.json'));
-      if (response.statusCode == HttpStatus.ok) {
-        // var json = jsonDecode(response.body); --> problèmes avec les accents
-        var json = jsonDecode(utf8.decode(response.bodyBytes));
-        return Location.fromJson(json);
+    return super.getOne(id.toString());
+  }
 
-      } else {
-        throw Exception('Impossible de récupérer la location $id');
-      }
-    } catch(e) {
-      rethrow;
-    }
+  @override
+  Future<Location> addLocation(Location location) {
+    return super.add(location.id.toString(), location);
+  }
 
+  @override
+  Future<bool> deleteLocation(int id) {
+    return super.remove(id.toString());
   }
 }

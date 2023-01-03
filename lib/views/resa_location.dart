@@ -232,7 +232,11 @@ class _ResaLocationState extends State<ResaLocation> {
           } else {
             /*Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const ValidationLocation()),
                     (route) => route.isFirst);*/
-            Navigator.pushNamedAndRemoveUntil(context, ValidationLocation.routeName, (route) => route.isFirst);
+            Navigator.pushNamedAndRemoveUntil(
+                context,
+                ValidationLocation.routeName,
+                (route) => route.isFirst,
+            );
           }
         },
         child: Text(

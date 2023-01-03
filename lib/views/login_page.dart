@@ -1,4 +1,5 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:locations/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -132,11 +133,14 @@ class _LoginPageState extends State<LoginPage> {
       await prefs.setString('RAH_pwd', account.password);
     }
     // account
-    print('_logUser: $account');
+    if (kDebugMode) {
+      print('_logUser: $account');
+    }
     // Navigator.popAndPushNamed(context, widget.routeNameNext);
-    // Affichage de la page et vidage de la pile des pages (sauf la première page : home)
-    Navigator.pushNamedAndRemoveUntil(
-        context, widget.routeNameNext, (route) => route.isFirst);
+    // Affiche la page et vide de la pile des pages (sauf la première page : home)
+    /*Navigator.pushNamedAndRemoveUntil(
+        context, widget.routeNameNext, (route) => route.isFirst);*/
+    Navigator.pop(context);
   }
 }
 

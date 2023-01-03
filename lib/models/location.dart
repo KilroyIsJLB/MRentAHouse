@@ -1,5 +1,7 @@
 
 
+import 'dart:convert';
+
 import 'package:locations/models/facture.dart';
 
 import 'habitation.dart';
@@ -31,4 +33,20 @@ class Location {
         optionpayantes = (json['locationOptionpayanteros'] as List)
             .map((item) => OptionPayante.fromJson(item))
             .toList();
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'idhabitation': idhabitation,
+    'datedebut': dateDebut,
+    'datefin': dateFin,
+    'montanttotal': montanttotal,
+    'montantverse': montantverse,
+    'facture': facture ?? facture!.toJson(),
+    'optionpayantes': optionpayantes.map((e) => jsonEncode(e)).toString()
+  };
+
+  @override
+  String toString() {
+    return 'Location{$toJson()}';
+  }
 }

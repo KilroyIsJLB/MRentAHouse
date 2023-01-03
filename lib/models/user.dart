@@ -1,6 +1,4 @@
 
-import 'location.dart';
-
 class User {
   final String email;
   final String nom;
