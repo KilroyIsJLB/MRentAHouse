@@ -1,4 +1,4 @@
-
+import 'package:intl/intl.dart';
 
 class Facture {
   int id;
@@ -16,6 +16,6 @@ class Facture {
       {
         'id': id,
         'adresse': adresse,
-        'date': date
+        'date': DateFormat('yyyy-MM-dd').format(date)
       };
 }

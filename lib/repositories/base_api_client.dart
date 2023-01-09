@@ -48,12 +48,20 @@ abstract class BaseApPiClient<T> {
     }
   }
 
-  Future<T> add(String id, T t) async {
-    String finalUri = "$baseUri/$id";
+  Future<T> add(T t) async {
+    String finalUri = baseUri;
 
     try {
-      final response = await http.post(Uri.parse(finalUri), body: convertToJson(t));
-      if (response.statusCode == HttpStatus.ok) {
+      //encode Map to JSON
+      Map<String, dynamic> json = convertToJson(t);
+      var body = jsonEncode(json);
+
+      final response = await http.post(
+          Uri.parse(finalUri),
+          headers: {"Content-Type": "application/json"},
+          body: body
+      );
+      if (response.statusCode == HttpStatus.created) {
         var json = jsonDecode(utf8.decode(response.bodyBytes));
         return createFromJson(json);
       } else {

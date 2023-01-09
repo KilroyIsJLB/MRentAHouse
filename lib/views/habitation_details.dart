@@ -144,7 +144,7 @@ class _HabitationDetailsState extends State<HabitationDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget._habitation.optionpayantes[i].libelle),
+                Text(widget._habitation.optionpayantes[i].option.libelle),
                 Text(
                   format.format(widget._habitation.optionpayantes[i].prix),
                   style: LocationTextStyle.priceGreyTextStyle,

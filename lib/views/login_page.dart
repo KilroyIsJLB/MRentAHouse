@@ -7,16 +7,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'register_page.dart';
 
 class LoginPageArgument {
-  final String routeNameNext;
+  final String? routeNameNext;
+  final Object? extras;
 
-  LoginPageArgument(this.routeNameNext);
+  LoginPageArgument(this.routeNameNext, {this.extras});
 }
 
 class LoginPage extends StatefulWidget {
   static String routeName = 'login';
-  final String routeNameNext;
 
-  const LoginPage(this.routeNameNext, {Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -29,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -102,13 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Text('Pas enregistré ?'),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                RegisterPage(widget.routeNameNext),
-                          ),
-                        );
+                        _goToRegisterPage(context);
                       },
                       child: const Text('Créer un compte'),
                     ),
@@ -122,25 +115,51 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _logUser(BuildContext context) async {
+  void _logUser(BuildContext context) {
     // TODO : faire la connection Utilisateur;
     if (rememberValue) {
-      // https://docs.flutter.dev/cookbook/persistence/key-value
-      // obtain shared preferences
-      final prefs = await SharedPreferences.getInstance();
-      // set value
-      await prefs.setString('RAH_email', account.email);
-      await prefs.setString('RAH_pwd', account.password);
+      _savePreferences();
     }
     // account
     if (kDebugMode) {
       print('_logUser: $account');
     }
+
     // Navigator.popAndPushNamed(context, widget.routeNameNext);
     // Affiche la page et vide de la pile des pages (sauf la première page : home)
     /*Navigator.pushNamedAndRemoveUntil(
         context, widget.routeNameNext, (route) => route.isFirst);*/
-    Navigator.pop(context);
+
+    // https://docs.flutter.dev/cookbook/navigation/navigate-with-arguments
+    Object? args = ModalRoute.of(context)!.settings.arguments;
+    if (args == null) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/', (route) => route.isFirst);
+    } else {
+      LoginPageArgument loginPageArgument = (args as LoginPageArgument);
+      Navigator.pushNamedAndRemoveUntil(
+          context, loginPageArgument.routeNameNext!, (route) => route.isFirst,
+          arguments: loginPageArgument.extras);
+    }
+
+  }
+
+  _savePreferences() async {
+    // https://docs.flutter.dev/cookbook/persistence/key-value
+    // obtain shared preferences
+    final prefs = await SharedPreferences.getInstance();
+    // set value
+    // await prefs.setString('RAH_id', user.id);
+    await prefs.setString('RAH_email', account.email);
+    await prefs.setString('RAH_pwd', account.password);
+  }
+
+  void _goToRegisterPage(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as LoginPageArgument;
+
+    Navigator.pushReplacementNamed(context, RegisterPage.routeName,
+        arguments: args);
   }
 }
 

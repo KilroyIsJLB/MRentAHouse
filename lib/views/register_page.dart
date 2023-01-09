@@ -1,11 +1,12 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  final String routeNameNext;
-  const RegisterPage(this.routeNameNext, {Key? key}) : super(key: key);
+  static String routeName = 'register';
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -156,13 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       const Text('Déjà un compte ?'),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  LoginPage(widget.routeNameNext),
-                            ),
-                          );
+                          _navigateToLoginPage(context);
                         },
                         child: const Text('Enregistrement'),
                       ),
@@ -180,8 +175,24 @@ class _RegisterPageState extends State<RegisterPage> {
   void _registerUser(BuildContext context) {
     // TODO : faire l'enregistrement Utilisateur;
     // account
-    print('_registerUser: $account');
-    Navigator.popAndPushNamed(context, widget.routeNameNext);
+    if (kDebugMode) {
+      print('_registerUser: $account');
+    }
+
+    final args =
+      ModalRoute.of(context)!.settings.arguments as LoginPageArgument;
+
+    Navigator.pushNamedAndRemoveUntil(
+        context, args.routeNameNext!, (route) => route.isFirst,
+        arguments: args.extras);
+  }
+
+  void _navigateToLoginPage(BuildContext context) {
+    final args =
+      ModalRoute.of(context)!.settings.arguments as LoginPageArgument;
+
+    Navigator.pushReplacementNamed(context, LoginPage.routeName,
+        arguments: args);
   }
 }
 

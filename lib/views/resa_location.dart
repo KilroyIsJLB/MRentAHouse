@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:locations/models/habitation.dart';
+import 'package:locations/models/location.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
 import 'package:locations/views/login_page.dart';
@@ -10,12 +11,13 @@ import 'package:locations/views/share/total_widget.dart';
 import 'package:locations/views/validation_location.dart';
 
 import '../bloc/user_cubit.dart';
+import '../models/option.dart';
 
-class OptionPayanteCheck extends OptionPayante {
-  bool checked;
+class OptionPayanteCheck {
+  OptionPayante optionPayante;
+  bool checked = false;
 
-  OptionPayanteCheck(super.id, super.libelle, this.checked,
-      {super.description = "", super.prix});
+  OptionPayanteCheck(this.optionPayante);
 }
 
 class ResaLocation extends StatefulWidget {
@@ -27,6 +29,7 @@ class ResaLocation extends StatefulWidget {
 }
 
 class _ResaLocationState extends State<ResaLocation> {
+
   DateTime dateDebut = DateTime.now();
   DateTime dateFin = DateTime.now().add(const Duration(days: 1));
   String nbPersonnes = '1';
@@ -38,11 +41,11 @@ class _ResaLocationState extends State<ResaLocation> {
     double prix = widget._habitation.prixnuit * duration.inDays;
 
     if (optionPayanteChecks.isNotEmpty) {
-      optionPayanteChecks.forEach((element) {
+      for (var element in optionPayanteChecks) {
         if (element.checked) {
-          prix += element.prix;
+          prix += element.optionPayante.prix;
         }
-      });
+      }
     }
     return prix;
   }
@@ -183,14 +186,15 @@ class _ResaLocationState extends State<ResaLocation> {
       (index) => CheckboxListTile(
         //dense: true,
         title: Text(
-            '${optionPayanteChecks[index].libelle} (${format.format(optionPayanteChecks[index].prix)})'),
+            '${optionPayanteChecks[index].optionPayante.option.libelle} (${format.format(optionPayanteChecks[index].optionPayante.prix)})'),
         value: optionPayanteChecks[index].checked,
         onChanged: (bool? value) {
           setState(() {
             optionPayanteChecks[index].checked = value!;
           });
         },
-        subtitle: Text(optionPayanteChecks[index].description),
+        subtitle:
+            Text(optionPayanteChecks[index].optionPayante.option.description),
         secondary: const Icon(Icons.add_shopping_cart),
       ),
     ).toList());
@@ -200,9 +204,7 @@ class _ResaLocationState extends State<ResaLocation> {
     if (optionPayanteChecks.isEmpty &&
         widget._habitation.optionpayantes.isNotEmpty) {
       optionPayanteChecks = widget._habitation.optionpayantes
-          .map((element) => OptionPayanteCheck(
-              element.id, element.libelle, false,
-              description: element.description, prix: element.prix))
+          .map((element) => OptionPayanteCheck(element))
           .toList();
     }
   }
@@ -216,28 +218,11 @@ class _ResaLocationState extends State<ResaLocation> {
       margin: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(
-                LocationStyle.backgroundColorDarkBlue),),
+          backgroundColor: MaterialStateProperty.all<Color>(
+              LocationStyle.backgroundColorDarkBlue),
+        ),
         onPressed: () {
-          // Si l'utilisateur n'est pas loggué,
-          // il est redirigé vers la page de login
-          // Obtention de l'état actuel
-          UserState state = context.read<UserCubit>().state;
-          if (state.user.isEmpty()) {
-            /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => LoginPage(ValidationLocation.routeName)));*/
-            Navigator.pushNamed(context, LoginPage.routeName, arguments: LoginPageArgument(ValidationLocation.routeName));
-          } else {
-            /*Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const ValidationLocation()),
-                    (route) => route.isFirst);*/
-            Navigator.pushNamedAndRemoveUntil(
-                context,
-                ValidationLocation.routeName,
-                (route) => route.isFirst,
-            );
-          }
+          _navigateToValidationPage(context);
         },
         child: Text(
           'Louer',
@@ -246,5 +231,68 @@ class _ResaLocationState extends State<ResaLocation> {
       ),
     );
   }
+
+  void _navigateToValidationPage(BuildContext context) {
+    // Obtention des options payantes
+    List<OptionPayante> locationOptionPayantes = [];
+    for (var element in optionPayanteChecks) {
+      if (element.checked) locationOptionPayantes.add(element.optionPayante);
+    }
+    // Objet Location
+    Location location = Location(
+        0, -1, widget._habitation.id, dateDebut, dateFin, prixTotal, 0,
+        habitation: widget._habitation, optionpayantes: locationOptionPayantes);
+    ValidationLocationPageArgument locationPageArgument = ValidationLocationPageArgument(location);
+
+    // Si l'utilisateur n'est pas loggué,
+    // il est redirigé vers la page de login
+    // Obtention de l'état actuel
+    UserState state = context.read<UserCubit>().state;
+    if (state.user.isEmpty()) {
+      LoginPageArgument lpArgs = LoginPageArgument(ValidationLocation.routeName,
+          extras: locationPageArgument);
+      Navigator.pushNamed(context, LoginPage.routeName, arguments: lpArgs);
+    } else {
+      Navigator.pushNamed(context, ValidationLocation.routeName, arguments: locationPageArgument);
+    }
+  }
+
+  /*
+  Future<void> _navigateToLoginPage(BuildContext context) async {
+    final result =  await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoginPage(ValidationLocation.routeName)));
+    // final result =  await Navigator.pushNamed(context, LoginPage.routeName, arguments: LoginPageArgument(ValidationLocation.routeName));
+
+    // When a BuildContext is used from a StatefulWidget, the mounted property
+    // must be checked after an asynchronous gap.
+    if (!mounted) return;
+
+    if (result) {
+      _saveLocationAndConfirm();
+    }
+  }
+
+  void _saveLocationAndConfirm(int userId) {
+    // Obten
+    List<OptionPayante> locationOptionPayantes = [];
+    for (var element in optionPayanteChecks) {
+      if (element.checked) locationOptionPayantes.add(element.optionPayante);
+    }
+
+    Location location = Location(0, userId, widget._habitation.id, dateDebut, dateFin,
+        prixTotal, 0,
+        habitation: widget._habitation,
+        optionpayantes: locationOptionPayantes
+    );
+    _locationService.addLocation(location);
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      ValidationLocation.routeName,
+          (route) => route.isFirst,
+    );
+  }*/
 
 }

@@ -1,4 +1,5 @@
 
+import 'option.dart';
 import 'typehabitat.dart';
 
 class Habitation {
@@ -31,34 +32,11 @@ class Habitation {
         lits = json['lits'],
         salleBains = json['sdb'],
         superficie = json['superficie'],
-        prixnuit = json['prixnuit'],
+        prixnuit = json['prixnuit'] * 1.0,
         options = (json['items'] as List)
             .map((item) => Option.fromJson(item))
             .toList(),
         optionpayantes = (json['optionpayantes'] as List)
             .map((item) => OptionPayante.fromJson(item))
             .toList();
-}
-
-class Option {
-  int id;
-  String libelle;
-  String description;
-
-  Option(this.id, this.libelle, {this.description = ""});
-  Option.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        libelle = json['libelle'],
-        description = json['description'];
-}
-
-class OptionPayante extends Option {
-  double prix;
-
-  OptionPayante(super.id, super.libelle, {super.description = "", this.prix = 0});
-  OptionPayante.fromJson(Map<String, dynamic> json)
-      : prix = json['prix'],
-        super.fromJson(json['optionpayante']);
-
-
 }

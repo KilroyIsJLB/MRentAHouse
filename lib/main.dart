@@ -51,6 +51,9 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     _readUserPreferences(context);
 
+    /*SecurityContext.defaultContext
+      .setTrustedCertificates('assets/ca/lets-encrypt-r3.pem');*/
+
     return MaterialApp(
       title: 'Locations',
       theme: ThemeData(
@@ -67,9 +70,9 @@ class AppView extends StatelessWidget {
       // Le code précédent ...
       routes: {
         Profil.routeName: (context) => const Profil(),
-        LoginPage.routeName: (context) => const LoginPage('/'),
+        LoginPage.routeName: (context) => const LoginPage(),
         LocationList.routeName: (context) => const LocationList(),
-        ValidationLocation.routeName: (context) => const ValidationLocation(),
+        ValidationLocation.routeName: (context) => ValidationLocation(),
       },
       localizationsDelegates: const [GlobalMaterialLocalizations.delegate],
       supportedLocales: const [Locale('en'), Locale('fr')],
@@ -88,7 +91,7 @@ class AppView extends StatelessWidget {
 
         // Obtention de l'objet Cubit
         UserCubit user = context.read<UserCubit>();
-        user.authenticated(User(email, nbLocations: 2));
+        user.authenticated(User(email, 5, nbLocations: 2));
       }
     });
   }

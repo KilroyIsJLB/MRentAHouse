@@ -4,7 +4,7 @@ import 'package:locations/repositories/base_api_client.dart';
 import 'location_api_client.dart';
 
 class LocationApiClientImpl extends BaseApPiClient<Location> implements LocationApiClient {
-  static const String uri = 'http://10.0.2.2:7117/api/v1/locations';
+  static const String uri = 'http://10.0.2.2:5117/api/v1/locations';
 
   LocationApiClientImpl() : super(uri);
 
@@ -29,7 +29,7 @@ class LocationApiClientImpl extends BaseApPiClient<Location> implements Location
 
   @override
   Future<Location> addLocation(Location location) {
-    return super.add(location.id.toString(), location);
+    return super.add(location);
   }
 
   @override

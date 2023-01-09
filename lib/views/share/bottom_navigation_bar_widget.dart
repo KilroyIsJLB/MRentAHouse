@@ -52,32 +52,30 @@ class BottomNavigationBarWidget extends StatelessWidget {
         ),
       ],
       onTap: (index) {
-        String page = '/';
-        LoginPageArgument? lpArgs;
         switch (index) {
           case 2:
-            // Si l'utilisateur n'est pas loggué,
-            // il est redirigé vers la page de login
-            if (isUserNotConnected) {
-              page = LoginPage.routeName;
-              lpArgs = LoginPageArgument(LocationList.routeName);
-            } else {
-              page = LocationList.routeName;
-            }
+            _pushToRoute(context, isUserNotConnected, LocationList.routeName);
             break;
           case 3:
-            // Si l'utilisateur n'est pas loggué,
-            // il est redirigé vers la page de login
-            if (isUserNotConnected) {
-              page = LoginPage.routeName;
-              lpArgs = LoginPageArgument(Profil.routeName);
-            } else {
-              page = Profil.routeName;
-            }
+            _pushToRoute(context, isUserNotConnected, Profil.routeName);
             break;
         }
-        Navigator.pushNamedAndRemoveUntil(context, page, (route) => false);
       },
     );
+  }
+
+  _pushToRoute(BuildContext context, bool isUserNotConnected, String routeName) {
+    String page = '/';
+    LoginPageArgument? lpArgs;
+
+    // Si l'utilisateur n'est pas loggué,
+    // il est redirigé vers la page de login
+    if (isUserNotConnected) {
+      page = LoginPage.routeName;
+      lpArgs = LoginPageArgument(routeName);
+    } else {
+      page = routeName;
+    }
+    Navigator.pushNamedAndRemoveUntil(context, page, (route) => false, arguments: lpArgs);
   }
 }

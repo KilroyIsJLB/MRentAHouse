@@ -8,14 +8,14 @@ import '../repositories/location_api_data_impl.dart';
 import 'habitation_service.dart';
 
 class LocationService {
-  final LocationApiClient locationApiClient;
+  final LocationApiClient _locationApiClient;
 
   LocationService() :
         //locationApiClient = LocationApiData();
-        locationApiClient = LocationApiClientImpl();
+        _locationApiClient = LocationApiClientImpl();
 
   Future<List<Location>> getLocations() async {
-    List<Location> list = await locationApiClient.getLocations();
+    List<Location> list = await _locationApiClient.getLocations();
 
     // Obtention des habitations
     List<int> habitationsIds = [];
@@ -38,14 +38,14 @@ class LocationService {
   }
 
   Future<Location> getLocation(int id) {
-    return locationApiClient.getLocation(id);
+    return _locationApiClient.getLocation(id);
   }
 
   Future<Location> addLocation(Location location) {
-    return locationApiClient.addLocation(location);
+    return _locationApiClient.addLocation(location);
   }
 
   Future<bool> deleteLocation(int id) {
-    return locationApiClient.deleteLocation(id);
+    return _locationApiClient.deleteLocation(id);
   }
 }
