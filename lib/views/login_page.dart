@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:locations/models/user.dart';
+import 'package:locations/models/user_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'register_page.dart';
@@ -25,7 +26,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
-  final _Account account = _Account();
+  final User account = User.empty;
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +150,7 @@ class _LoginPageState extends State<LoginPage> {
     // obtain shared preferences
     final prefs = await SharedPreferences.getInstance();
     // set value
-    // await prefs.setString('RAH_id', user.id);
-    await prefs.setString('RAH_email', account.email);
-    await prefs.setString('RAH_pwd', account.password);
+    await account.savePreferences(prefs);
   }
 
   void _goToRegisterPage(BuildContext context) {
@@ -160,15 +159,5 @@ class _LoginPageState extends State<LoginPage> {
 
     Navigator.pushReplacementNamed(context, RegisterPage.routeName,
         arguments: args);
-  }
-}
-
-class _Account {
-  String email = '';
-  String password = '';
-
-  @override
-  String toString() {
-    return '_Account{email: $email, password: $password}';
   }
 }

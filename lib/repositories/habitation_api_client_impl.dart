@@ -15,8 +15,7 @@ class HabitationApiClientImpl extends BaseApPiClient<Habitation> implements Habi
 
   @override
   Map<String, dynamic> convertToJson(Habitation t) {
-    // TODO: implement convertToJson
-    throw UnimplementedError();
+    return t.toJson();
   }
 
   @override
@@ -37,7 +36,8 @@ class HabitationApiClientImpl extends BaseApPiClient<Habitation> implements Habi
   @override
   Future<List<Habitation>> getHabitationsById(List<int> habitationsIds) async {
     List<Habitation> habitations = await getHabitations();
-    return habitations.takeWhile((value) => habitationsIds.contains(value.id)).toList();
+    return habitations.where((element) => habitationsIds.contains(element.id)).toList();
+    //return habitations.takeWhile((value) => habitationsIds.contains(value.id)).toList();
   }
 
   @override

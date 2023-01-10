@@ -10,4 +10,11 @@ class TypeHabitat {
   TypeHabitat.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         libelle = json['libelle'];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'libelle': libelle
+    };
+  }
 }

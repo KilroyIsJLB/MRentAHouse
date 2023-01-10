@@ -24,16 +24,10 @@ class ValidationLocation extends StatefulWidget {
 class _ValidationLocationsState extends State<ValidationLocation> {
 
   final LocationService _locationService = LocationService();
-  late Future<Location> _location;
-
-
-  @override
-  void initState() {
-  }
+  bool isAPICalled = false;
 
   @override
   Widget build(BuildContext context) {
-    _location = _ajoutLocation(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +35,7 @@ class _ValidationLocationsState extends State<ValidationLocation> {
       ),
       body: Center(
         child: FutureBuilder<Location>(
-          future: _location,
+          future: _ajoutLocation(context),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return const Center(
@@ -64,7 +58,6 @@ class _ValidationLocationsState extends State<ValidationLocation> {
   }
 
   Future<Location> _ajoutLocation(BuildContext context) async {
-
     final args =
       ModalRoute.of(context)!.settings.arguments as ValidationLocationPageArgument;
 

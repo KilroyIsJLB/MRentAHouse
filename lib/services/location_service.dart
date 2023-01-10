@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import '../models/habitation.dart';
 import '../repositories/location_api_client.dart';
 import '../repositories/location_api_client_impl.dart';
-import '../repositories/location_api_data_impl.dart';
 import 'habitation_service.dart';
 
 class LocationService {
@@ -21,7 +20,9 @@ class LocationService {
     List<int> habitationsIds = [];
     // Construction de la liste des Ids des habitations
     for (Location location in list) {
-      habitationsIds.add(location.id);
+      if (! habitationsIds.contains(location.idhabitation)) {
+        habitationsIds.add(location.idhabitation);
+      }
     }
 
     // Obtention des habitations

@@ -24,13 +24,11 @@ class LocationApiData implements LocationApiClient {
 
   @override
   Future<Location> addLocation(Location location) {
-    // TODO: implement addLocation
     throw UnimplementedError();
   }
 
   @override
   Future<bool> deleteLocation(int id) {
-    // TODO: implement deleteLocation
     throw UnimplementedError();
   }
 }

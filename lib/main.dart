@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import 'package:locations/models/habitation.dart';
 import 'package:locations/models/typehabitat.dart';
+import 'package:locations/models/user_extensions.dart';
 import 'package:locations/share/location_style.dart';
 import 'package:locations/share/location_text_style.dart';
 import 'package:locations/views/share/bottom_navigation_bar_widget.dart';
@@ -80,18 +81,16 @@ class AppView extends StatelessWidget {
   }
 
   void _readUserPreferences(BuildContext context) {
+    User account = User.empty;
     // obtain shared preferences
     final Future<SharedPreferences> prefs  = SharedPreferences.getInstance();
     prefs.then((prefs) {
-      // get value
-      String email = prefs.getString('RAH_email') ?? '';
-      if (email.isNotEmpty) {
-        String password = prefs.getString('RAH_pwd') ?? '';
-        // TODO : faire la connection Utilisateur;
-
+      // get values
+      account.loadPreferences(prefs);
+      if (! account.isEmpty()) {
         // Obtention de l'objet Cubit
         UserCubit user = context.read<UserCubit>();
-        user.authenticated(User(email, 5, nbLocations: 2));
+        user.authenticated(account);
       }
     });
   }

@@ -14,8 +14,7 @@ class TypeHabitatApiClientImpl extends BaseApPiClient<TypeHabitat> implements Ty
   }
   @override
   Map<String, dynamic> convertToJson(TypeHabitat t) {
-    // TODO: implement convertToJson
-    throw UnimplementedError();
+    return t.toJson();
   }
 
   @override

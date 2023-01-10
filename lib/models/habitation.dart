@@ -39,4 +39,32 @@ class Habitation {
         optionpayantes = (json['optionpayantes'] as List)
             .map((item) => OptionPayante.fromJson(item))
             .toList();
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {
+      'id': id,
+      'typeHabitat': typeHabitat.toJson(),
+      'image': image,
+      'libelle': libelle,
+      'adresse': adresse,
+      'nbpersonnes': nbpersonnes,
+      'chambres': chambres,
+      'lits': lits,
+      'salleBains': salleBains,
+      'superficie': superficie,
+      'prixnuit': prixnuit,
+      'options': options.map((e) => e.toJson()),
+      'optionpayantes': optionpayantes.map((e) => e.toJson())
+    };
+    if (options.isNotEmpty) {
+      List<Map> optionsMap = options.map((i) => i.toJson()).toList();
+      json.putIfAbsent('options', () => optionsMap);
+    }
+    if (optionpayantes.isNotEmpty) {
+      List<Map> optionpayantesMap = optionpayantes.map((i) => i.toJson()).toList();
+      json.putIfAbsent('optionpayantes', () => optionpayantesMap);
+    }
+
+    return json;
+  }
 }
